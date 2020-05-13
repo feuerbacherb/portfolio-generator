@@ -17,4 +17,4 @@ const generatePage = (userName, githubName) => {
    `;
 };
 
-module.exports = generatePage;
+module.exports = generatePage
