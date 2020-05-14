@@ -1,12 +1,13 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const generatePage = require('./src/page-template');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 
 const promptUser = () => {
    return inquirer.prompt([
          {
             type: 'input',
-            name: 'name;',
+            name: 'name',
             message: 'What is your name? (Required)',
             validate: nameInput => {
                if (nameInput) {
@@ -145,33 +146,6 @@ promptUser()
 
 
 
-// const profileDataArgs = process.argv.slice(2, process.argv.length);
-// const [name, github] = profileDataArgs;
-
-
-
-// fs.writeFile('index.html', generatePage(name, github), err => {
-//    if (err) throw err;
-
-//    console.log('Portfolio complete! Check out index.html to see the output!')
-// });
-
-/***
-const profileDataArgs = process.argv.slice(2, process.argv.length);
-console.log(profileDataArgs);
-
-const printProfileData = profileDataArr => {
-   
-   for (let i = 0; i < profileDataArr.length; i += 1) {
-      console.log(profileDataArr[i]);
-   }
-   console.log('=====================');
-   profileDataArr.forEach(profileItem => console.log(profileItem));
-   
-};
-
-printProfileData(profileDataArgs);
- ***/
 
  const mockData = {
    name: 'Lernantino',
@@ -218,7 +192,42 @@ printProfileData(profileDataArgs);
      }
    ]
  };
- 
- const pageHTML = generatePage(mockData);
- fs.writeFile('index.html', generatePage(mockData), err => {
-   if (err) throw err;});
+
+ /*
+const pageHTML = generatePage(mockData);
+fs.writeFile('./dist/index.html', generatePage(mockData), err => {
+   if (err) {
+      console.log(err);
+      return;
+   }
+   console.log('Page created! Check out index.html in this directory to see it!');
+
+   fs.copyFile('./src/style.css', './dist/style.css', err => {
+      if (err) {
+         console.log(err);
+         return;
+      }
+      console.log('Style sheet copied successfully!');
+   });
+
+});
+*/
+
+promptUser()
+  .then(promptProject)
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
+  });
