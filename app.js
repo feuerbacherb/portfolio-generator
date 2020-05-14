@@ -1,5 +1,6 @@
-
+const fs = require('fs');
 const inquirer = require('inquirer');
+const generatePage = require('./src/page-template');
 
 const promptUser = () => {
    return inquirer.prompt([
@@ -127,14 +128,22 @@ const promptProject = portfolioData => {
 };
 
 
-
+/*
 promptUser()
    .then(promptProject)
    .then(portfolioData => {
-      console.log(portfolioData);
+      const pageHTML = generatePage(portfolioData);
+      // const profileDataArgs = process.argv.slice(2, process.argv.length);
+
+      fs.writeFile('index.html', generatePage(portfolioData.name, portfolioData.github), err => {
+         if (err) throw err;
+
+         console.log('Portfolio complete! Check out index.html to see the output!')
+      });
    });
-// const fs = require('fs');
-// const generatePage = require('./src/page-template.js');
+*/
+
+
 
 // const profileDataArgs = process.argv.slice(2, process.argv.length);
 // const [name, github] = profileDataArgs;
@@ -146,7 +155,6 @@ promptUser()
 
 //    console.log('Portfolio complete! Check out index.html to see the output!')
 // });
-
 
 /***
 const profileDataArgs = process.argv.slice(2, process.argv.length);
@@ -164,3 +172,53 @@ const printProfileData = profileDataArr => {
 
 printProfileData(profileDataArgs);
  ***/
+
+ const mockData = {
+   name: 'Lernantino',
+   github: 'lernantino',
+   confirmAbout: true,
+   about:
+     'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
+   projects: [
+     {
+       name: 'Run Buddy',
+       description:
+         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+       languages: ['HTML', 'CSS'],
+       link: 'https://github.com/lernantino/run-buddy',
+       feature: true,
+       confirmAddProject: true
+     },
+     {
+       name: 'Taskinator',
+       description:
+         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+       languages: ['JavaScript', 'HTML', 'CSS'],
+       link: 'https://github.com/lernantino/taskinator',
+       feature: true,
+       confirmAddProject: true
+     },
+     {
+       name: 'Taskmaster Pro',
+       description:
+         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+       languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
+       link: 'https://github.com/lernantino/taskmaster-pro',
+       feature: false,
+       confirmAddProject: true
+     },
+     {
+       name: 'Robot Gladiators',
+       description:
+         'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
+       languages: ['JavaScript'],
+       link: 'https://github.com/lernantino/robot-gladiators',
+       feature: false,
+       confirmAddProject: false
+     }
+   ]
+ };
+ 
+ const pageHTML = generatePage(mockData);
+ fs.writeFile('index.html', generatePage(mockData), err => {
+   if (err) throw err;});
