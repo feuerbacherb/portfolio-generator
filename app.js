@@ -1,18 +1,20 @@
 const inquirer = require("inquirer");
+
 const fs = require("fs");
-const generatePage = require("./src/page-template");
+const generatePage = require("./src/page-template.js");
+const { writeFile, copyFile } = require("./utils/generate-site.js");
 
 const promptUser = () => {
   return inquirer.prompt([
     {
       type: "input",
       name: "name",
-      message: "What is your name? (Required)",
+      message: "What is your name?",
       validate: (nameInput) => {
         if (nameInput) {
           return true;
         } else {
-          console.log("Please enter your name!");
+          console.log("Please enter your name.");
           return false;
         }
       },
@@ -20,12 +22,12 @@ const promptUser = () => {
     {
       type: "input",
       name: "github",
-      message: "Enter your GitHub Username (Required)",
+      message: "Enter your GitHub Username",
       validate: (githubInput) => {
         if (githubInput) {
           return true;
         } else {
-          console.log("Enter your GitHub username!");
+          console.log("Please enter your GitHub username.");
           return false;
         }
       },
@@ -34,7 +36,7 @@ const promptUser = () => {
       type: "confirm",
       name: "confirmAbout",
       message:
-        'Would you like to enter some information about yourself for an "About" section?',
+        "Would you like to enter some information about yourself for an About section?",
       default: true,
     },
     {
@@ -47,28 +49,25 @@ const promptUser = () => {
 };
 
 const promptProject = (portfolioData) => {
-  console.log(`
-  =================
-  Add a New Project
-  =================
-  `);
-
-  // if there's no 'projects' array property, create one
+  //If there's no projects array property, create one
   if (!portfolioData.projects) {
     portfolioData.projects = [];
   }
-
+  console.log(`
+    =================
+    Add a New Project
+    =================`);
   return inquirer
     .prompt([
       {
         type: "input",
         name: "name",
         message: "What is the name of your project?",
-        validate: (projectName) => {
-          if (projectName) {
+        validate: (nameInput) => {
+          if (nameInput) {
             return true;
           } else {
-            console.log("Enter your project name!");
+            console.log("Please name your project");
             return false;
           }
         },
@@ -77,11 +76,11 @@ const promptProject = (portfolioData) => {
         type: "input",
         name: "description",
         message: "Provide a description of the project (Required)",
-        validate: (projectDescription) => {
-          if (projectDescription) {
+        validate: (descriptionInput) => {
+          if (descriptionInput) {
             return true;
           } else {
-            console.log("Enter a description of your project");
+            console.log("Enter a description for your project.");
             return false;
           }
         },
@@ -89,9 +88,10 @@ const promptProject = (portfolioData) => {
       {
         type: "checkbox",
         name: "languages",
-        message: "What did you program this with? (Check all that apply)",
+        messsage:
+          "What did you create this project with? (Check all that apply)",
         choices: [
-          "JavaScript",
+          "Javascript",
           "HTML",
           "CSS",
           "ES6",
@@ -103,12 +103,12 @@ const promptProject = (portfolioData) => {
       {
         type: "input",
         name: "link",
-        mesage: "Enter the GitHub link to your project. (Required)",
-        validate: (projectLink) => {
-          if (projectLink) {
+        message: "Enter the GitHub link to your project (Required)",
+        validate: (linkInput) => {
+          if (linkInput) {
             return true;
           } else {
-            console.log("Provide a project link");
+            console.log("Please enter a link for your project.");
             return false;
           }
         },
@@ -139,11 +139,18 @@ const promptProject = (portfolioData) => {
 promptUser()
   .then(promptProject)
   .then((portfolioData) => {
-    const pageHTML = generatePage(portfolioData);
-    fs.writeFile("./index.html", pageHTML, (err) => {
-      if (err) throw new Error(err);
-      console.log(
-        "Page created! Check out index.html in this directory to see it!"
-      );
-    });
+    return generatePage(portfolioData);
+  })
+  .then((pageHTML) => {
+    return writeFile(pageHTML);
+  })
+  .then((writeFileResponse) => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then((copyFileResponse) => {
+    console.log(copyFileResponse);
+  })
+  .catch((err) => {
+    console.log(err);
   });
