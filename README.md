@@ -8,6 +8,7 @@ Installation of Portfolio Generator is fairly straightforward.
 - Clone the Portfolio Generator project from GitHub
 - Open Git Bash in the directory where you would like the project to be depoloyed and type in:
 ```npm install```
+
 -The installation is fairly straightforward.
 -One change that might need to be made is in the package.json file.  Open it and check to make sure the "type" is "commonjs".
 
