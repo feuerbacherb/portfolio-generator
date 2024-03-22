@@ -1,7 +1,7 @@
 # Portfolio Generator
 
 ## Description
-Portfolio generate was developed in order to allow users to easily create a portfolio of their development history through a command-line interface.  With easy to answer questions, anyone who has created pages on the internet can simply go through the questions and have a nice, organized web page that not only can list their projects, but also allows the user to feature projects they are extremely proud of.
+Portfolio Generator was developed in order to allow users to easily create a portfolio of their development history through a command-line interface.  With easy to answer questions, anyone who has created pages on the internet can simply go through the questions and have a nice, organized web page that not only can list their projects, but also allows the user to feature projects they are extremely proud of.
 
 ## Installation
 Installation of Portfolio Generator is fairly straightforward.
